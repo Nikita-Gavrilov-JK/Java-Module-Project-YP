@@ -21,23 +21,25 @@ public class Calculator {
             if (productName.equalsIgnoreCase("Завершить"))
                 break;
 
-            try {
-                do {
+            while (true) {
+                try {
                     System.out.println("Введите стоимость товара: ");
                     productCost = Double.parseDouble(scanner.nextLine());
-                    if (productCost < 0){
+                    if (productCost < 0) {
                         System.out.println("Стоимость товара не может быть отрицательной");
+                        continue;
                     }
-                } while (productCost < 0);
-                productNames += productName + "\n";
-                totalSum += productCost;
-                System.out.println("Товар \"" + productName +"\" добавлен! " + "Общая стоимость: " +
-                        formatRub(totalSum) + "\nЕсли хотите \"завершить\" добавление товаров просто напишите;)");
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Неправильный формат стоимости товара!\nПопробуйте снова");
+                }
             }
-            catch (NumberFormatException e) {
-                System.out.println("Неправильный формат стоимости товара!\nПопробуйте снова");
-            }
+            productNames += productName + "\n";
+            totalSum += productCost;
+            System.out.println("Товар \"" + productName +"\" добавлен! " + "Общая стоимость: " +
+                    formatRub(totalSum) + "\nЕсли хотите \"завершить\" добавление товаров просто напишите;)");
         }
+
 
         System.out.println("Добавленные товары: \n" + productNames);
         System.out.println("Сумма которую должен заплатить каждый человек: " +
@@ -46,15 +48,31 @@ public class Calculator {
     }
     public String formatRub (double sumRub) {
         int ruble = (int) sumRub;
+        int twoLustNum = ruble % 100;
+        int oneLustNum = ruble % 10;
         String strRub;
-        if (ruble % 100 == 11 || ruble % 100 == 12 || ruble % 100 == 13 || ruble % 100 == 14) {
-            strRub = "рублей";
-        } else if (ruble % 10 == 1) {
-            strRub = "рубль";
-        } else if (ruble % 10 >= 2 && ruble % 10 <= 4) {
-            strRub = "рубля";
-        } else {
-            strRub = "рублей";
+
+        switch (twoLustNum) {
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+                strRub = "рублей";
+                break;
+            default:
+                switch (oneLustNum) {
+                    case 1:
+                        strRub = "рубль";
+                        break;
+                    case 2:
+                    case 3:
+                    case 4:
+                        strRub = "рубля";
+                        break;
+                    default:
+                        strRub = "рублей";
+                        break;
+                }
         }
         return String.format("%.2f %s", sumRub, strRub);
     }

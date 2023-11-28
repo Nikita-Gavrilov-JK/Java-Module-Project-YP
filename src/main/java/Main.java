@@ -8,19 +8,25 @@ public class Main {
 
         while(true) {
             System.out.println("На скольких человек необходимо разделить счёт?");
-            countPeople = scanner.nextInt();
-            if (countPeople == 1){
+            if (scanner.hasNextInt()) {
+                countPeople = scanner.nextInt();
+                scanner.nextLine();
+            }
+            else {
+                System.out.println("Неправильный формат ввода\nВведите целое число");
+                scanner.nextLine();
+                continue;
+            }
+            if (countPeople == 1) {
                 System.out.println("Нет смысла ничего считать и делить.");
             } else if (countPeople < 1) {
                 System.out.println("Количество людей должно быть больше 1");
-            }
-            else {
+            } else {
                 Calculator calculator = new Calculator(countPeople);
                 calculator.culc();
                 scanner.close();
                 break;
             }
-
         }
 
     }
